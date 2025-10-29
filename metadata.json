@@ -1,0 +1,5 @@
+{
+  "name": "AI Nutrition Health Management System",
+  "description": "An AI-powered system to analyze food from images, track nutritional intake, and provide personalized health recommendations. Upload a photo of your meal to get a detailed breakdown of calories, macronutrients, and more.",
+  "requestFramePermissions": []
+}
