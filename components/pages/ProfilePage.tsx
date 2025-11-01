@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import type { UserData, Profile, HealthGoal } from '../../types';
-import { ACTIVITY_LEVELS, HEALTH_GOALS } from '../../constants';
+import { ACTIVITY_LEVELS, HEALTH_GOALS } from '../../env';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import Input from '../ui/Input';

@@ -24,6 +24,13 @@ const App: React.FC = () => {
     }));
   };
 
+  const clearFoodLog = () => {
+    setUserData(prev => ({
+      ...prev,
+      foodLog: [],
+    }));
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
@@ -35,7 +42,7 @@ const App: React.FC = () => {
       case 'health-data':
         return <HealthDataPage userData={userData} />;
       case 'history':
-        return <HistoryPage userData={userData} />;
+        return <HistoryPage userData={userData} clearFoodLog={clearFoodLog} />;
       case 'recommendations':
         return <RecommendationsPage userData={userData} setCurrentPage={setCurrentPage} />;
       default:

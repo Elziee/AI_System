@@ -1,7 +1,8 @@
+
 import React, { useState, useCallback } from 'react';
 import { analyzeFoodImage } from '../../services/geminiService';
 import type { AnalysisResult, FoodEntry, MealType } from '../../types';
-import { MEAL_TYPES } from '../../constants';
+import { MEAL_TYPES } from '../../env';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import Select from '../ui/Select';

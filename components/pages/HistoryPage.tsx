@@ -1,31 +1,45 @@
 
 import React, { useState } from 'react';
 import type { UserData, FoodEntry, MealType } from '../../types';
-import { MEAL_TYPES } from '../../constants';
+import { MEAL_TYPES } from '../../env';
 import Card from '../ui/Card';
 import Modal from '../ui/Modal';
 import AnalysisDetail from '../AnalysisDetail';
+import Button from '../ui/Button';
 
 interface HistoryPageProps {
   userData: UserData;
+  clearFoodLog: () => void;
 }
 
-const MealTypeMap: Record<MealType, string> = {
-  breakfast: '早餐',
-  lunch: '午餐',
-  dinner: '晚餐',
-  snack: '點心',
-}
+const MealTypeMap = Object.fromEntries(
+  MEAL_TYPES.map(type => [type.value, type.label])
+) as Record<MealType, string>;
 
-const HistoryPage: React.FC<HistoryPageProps> = ({ userData }) => {
+
+const HistoryPage: React.FC<HistoryPageProps> = ({ userData, clearFoodLog }) => {
   const [selectedEntry, setSelectedEntry] = useState<FoodEntry | null>(null);
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
 
   const sortedFoodLog = [...userData.foodLog].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  const handleConfirmClear = () => {
+    clearFoodLog();
+    setIsConfirmingClear(false);
+  };
+
   return (
     <div className="container mx-auto p-5 animate-fadeIn">
-      <div className="mb-6">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-text-primary">飲食歷史記錄</h1>
+        {sortedFoodLog.length > 0 && (
+          <Button
+            onClick={() => setIsConfirmingClear(true)}
+            className="!w-auto py-2 from-red-500 to-red-600 focus:ring-red-500"
+          >
+            清除所有記錄
+          </Button>
+        )}
       </div>
       
       {sortedFoodLog.length > 0 ? (
@@ -59,6 +73,28 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ userData }) => {
       {selectedEntry && (
         <Modal isOpen={!!selectedEntry} onClose={() => setSelectedEntry(null)} title="分析詳情">
           <AnalysisDetail analysis={selectedEntry.analysis} />
+        </Modal>
+      )}
+
+      {isConfirmingClear && (
+        <Modal isOpen={isConfirmingClear} onClose={() => setIsConfirmingClear(false)} title="確認清除記錄">
+          <div className="text-center p-4">
+            <p className="text-lg text-text-secondary mb-8">您確定要清除所有飲食歷史記錄嗎？此操作無法復原。</p>
+            <div className="flex justify-center gap-4">
+              <Button 
+                onClick={() => setIsConfirmingClear(false)} 
+                className="!w-auto py-2 px-6 from-gray-500 to-gray-600 focus:ring-gray-500"
+              >
+                取消
+              </Button>
+              <Button 
+                onClick={handleConfirmClear} 
+                className="!w-auto py-2 px-6 from-red-500 to-red-600 focus:ring-red-500"
+              >
+                確認清除
+              </Button>
+            </div>
+          </div>
         </Modal>
       )}
     </div>

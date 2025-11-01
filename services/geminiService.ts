@@ -1,6 +1,6 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AnalysisResult, Profile, RecommendationResult, DailyTotals, HealthRiskAssessment } from '../types';
+import { ai } from '../server/geminiClient';
 
 const analysisSchema = {
   type: Type.OBJECT,
@@ -50,12 +50,6 @@ const analysisSchema = {
 
 
 export const analyzeFoodImage = async (base64Image: string): Promise<AnalysisResult> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    throw new Error("API_KEY environment variable is not set.");
-  }
-  const ai = new GoogleGenAI({ apiKey });
-
   const imagePart = {
     inlineData: {
       mimeType: 'image/jpeg',
@@ -135,12 +129,6 @@ const recommendationSchema = {
 
 
 export const generateRecommendations = async (profile: Profile): Promise<RecommendationResult> => {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-      throw new Error("API_KEY environment variable is not set.");
-    }
-    const ai = new GoogleGenAI({ apiKey });
-
     const goalMap = {
         weightLoss: '減重減脂',
         muscleGain: '增肌塑形',
@@ -223,12 +211,6 @@ const healthRiskSchema = {
 };
 
 export const generateHealthRiskAssessment = async (profile: Profile, averageIntake: DailyTotals): Promise<HealthRiskAssessment> => {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable is not set.");
-    }
-    const ai = new GoogleGenAI({ apiKey });
-
     const goalMap = {
         weightLoss: '減重減脂',
         muscleGain: '增肌塑形',
